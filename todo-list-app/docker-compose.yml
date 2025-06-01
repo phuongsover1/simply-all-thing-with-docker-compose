@@ -2,26 +2,31 @@ services:
   app:
     build:
       context: .
-      target: prod
+      target: dev
       dockerfile: Dockerfile
     ports:
       - 3000:3000
     volumes:
       - nodemodules:/app/node_modules
       - ./:/app
+      - ./config:/config
     environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_DB: todos
+      MYSQL_HOST_FILE: /config/MYSQL_HOST
+      MYSQL_USER_FILE: /config/MYSQL_USER
+      MYSQL_PASSWORD_FILE: /config/MYSQL_PASSWORD
+      MYSQL_DB_FILE: /config/MYSQL_DB
 
   mysql:
     image: mysql:8.0
     volumes:
       - todo-mysql-data:/var/lib/mysql
+      - ./config:/config
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: todos
+      MYSQL_PASSWORD_FILE: /config/MYSQL_PASSWORD
+      MYSQL_DATABASE_FILE: /config/MYSQL_DB
+      MYSQL_USER_FILE: /config/MYSQL_USER
+      MYSQL_HOST_FILE: /config/MYSQL_HOST
+      
 
 volumes:
   todo-mysql-data:
