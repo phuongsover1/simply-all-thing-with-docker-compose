@@ -1,10 +1,11 @@
 services:
   app:
-    image: node:18-alpine
-    command: sh -c "yarn install && yarn run dev"
+    build:
+      context: .
+      target: prod
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
-    working_dir: /app
     volumes:
       - nodemodules:/app/node_modules
       - ./:/app
